@@ -5,15 +5,20 @@ import Contact from "../Contact/Contact";
 import s from "./ContactList.module.css";
 
 import { selectContacts } from "../../redux/contactsSlice";
-import { nanoid } from "nanoid";
+import { filterSelector } from "../../redux/filterSlice";
 
 const ContactList = () => {
+  const filter = useSelector(filterSelector);
   const contacts = useSelector(selectContacts);
+
+  const filteredData = contacts.filter((contact) =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
   return (
     <div>
       <ul className={s.list}>
-        {contacts.map(({ id, name, number }) => (
-          <Contact key={nanoid()} id={id} name={name} number={number} />
+        {filteredData.map(({ id, name, number }) => (
+          <Contact key={id} id={id} name={name} number={number} />
         ))}
       </ul>
     </div>
